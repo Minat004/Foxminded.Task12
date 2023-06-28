@@ -1,0 +1,21 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0DD9AAC5-1277-4DE0-BD55-79E307159006}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialTime.WebAPI", "src\FinancialTime.WebAPI\FinancialTime.WebAPI.csproj", "{1A9D5EAB-03A1-45D6-BB9C-E5ACD28E7E7E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1A9D5EAB-03A1-45D6-BB9C-E5ACD28E7E7E} = {0DD9AAC5-1277-4DE0-BD55-79E307159006}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A9D5EAB-03A1-45D6-BB9C-E5ACD28E7E7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A9D5EAB-03A1-45D6-BB9C-E5ACD28E7E7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A9D5EAB-03A1-45D6-BB9C-E5ACD28E7E7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A9D5EAB-03A1-45D6-BB9C-E5ACD28E7E7E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
