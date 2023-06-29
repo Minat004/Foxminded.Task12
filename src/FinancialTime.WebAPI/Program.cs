@@ -1,3 +1,4 @@
+using FinancialTime.Core;
 using FinancialTime.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddCore();
 
 var app = builder.Build();
 
