@@ -1,4 +1,5 @@
-﻿using FinancialTime.Core.Models;
+﻿using FinancialTime.Core.Enums;
+using FinancialTime.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinancialTime.Infrastructure;

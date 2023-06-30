@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using FinancialTime.Core.Enums;
 
 namespace FinancialTime.Core.Models;
 

@@ -1,4 +1,4 @@
-﻿namespace FinancialTime.Core.Models;
+﻿namespace FinancialTime.Core.Enums;
 
 public enum EBudget
 {
