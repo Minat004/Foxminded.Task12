@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddCore();
 
-builder.Services.AddAutoMapper(typeof(FinOperationProfile), typeof(FinTypeProfile));
+builder.Services.AddAutoMapper(typeof(FinOperationProfile), typeof(FinTypeProfile), typeof(ReportProfile));
 
 var app = builder.Build();
 

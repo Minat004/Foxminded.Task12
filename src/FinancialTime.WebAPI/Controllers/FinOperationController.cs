@@ -20,21 +20,21 @@ public class FinOperationController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<FinOperation>> GetOperations()
+    public async Task<IEnumerable<FinOperationDto>> GetOperations()
     {
         var items = await _operationService.GetAllAsync();
 
-        var finOperationList = _mapper.Map<IEnumerable<FinOperation>>(items);
+        var finOperationList = _mapper.Map<IEnumerable<FinOperationDto>>(items);
 
         return finOperationList;
     }
 
     [HttpGet("{id:int}")]
-    public async Task<FinOperation> GetOperationById(int id)
+    public async Task<FinOperationDto> GetOperationById(int id)
     {
         var item = await _operationService.GetByIdAsync(id);
 
-        var finOperation = _mapper.Map<FinOperation>(item);
+        var finOperation = _mapper.Map<FinOperationDto>(item);
         
         return finOperation;
     }

@@ -6,7 +6,7 @@ namespace FinancialTime.WebAPI.Mappers;
 
 public class ReportProfile : Profile
 {
-    protected ReportProfile()
+    public ReportProfile()
     {
         CreateMap<Report, ReportDateDto>()
             .ForMember(dto => dto.Date, 

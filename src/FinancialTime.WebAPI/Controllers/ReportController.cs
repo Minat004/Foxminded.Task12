@@ -18,7 +18,7 @@ public class ReportController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpGet("DateReport")]
+    [HttpGet("{date}")]
     public async Task<ReportDateDto> GetForDate(string date)
     {
         var dateTime = DateTime.Parse(date);
@@ -30,7 +30,7 @@ public class ReportController : ControllerBase
         return reportDto;
     }
 
-    [HttpGet("PeriodReport")]
+    [HttpGet("{startDate}/{endDate}")]
     public async Task<ReportPeriodDto> GetForPeriod(string startDate, string endDate)
     {
         var startDateTime = DateTime.Parse(startDate);

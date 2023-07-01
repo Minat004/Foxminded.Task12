@@ -22,6 +22,7 @@ public class GlobalErrorHandlingMiddleware
         catch (Exception e)
         {
             await HandleExceptionAsync(context, e);
+            throw;
         }
     }
 
