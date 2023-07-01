@@ -1,5 +1,6 @@
 using FinancialTime.Core;
 using FinancialTime.Infrastructure;
+using FinancialTime.WebAPI;
 using FinancialTime.WebAPI.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,10 +12,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAutoMapper(typeof(FinOperationProfile), typeof(FinTypeProfile));
-
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddCore();
+
+builder.Services.AddAutoMapper(typeof(FinOperationProfile), typeof(FinTypeProfile));
 
 var app = builder.Build();
 
@@ -24,6 +25,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
