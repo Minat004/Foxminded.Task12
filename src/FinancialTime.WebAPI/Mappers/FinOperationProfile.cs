@@ -24,7 +24,8 @@ public class FinOperationProfile : Profile
             .ForMember(dto => dto.Date,
                 expression => expression.MapFrom(src => src.Date))
             .ForMember(dto => dto.FinTypeId,
-                expression => expression.MapFrom(src => src.FinTypeId));
+                expression => expression.MapFrom(src => src.FinTypeId))
+            .ReverseMap();
 
         CreateMap<FinOperation, FinOperationEditDto>()
             .ForMember(dto => dto.Value,
@@ -32,6 +33,7 @@ public class FinOperationProfile : Profile
             .ForMember(dto => dto.Date,
                 expression => expression.MapFrom(src => src.Date))
             .ForMember(dto => dto.FinTypeId,
-                expression => expression.MapFrom(src => src.FinTypeId));
+                expression => expression.MapFrom(src => src.FinTypeId))
+            .ReverseMap();
     }
 }
