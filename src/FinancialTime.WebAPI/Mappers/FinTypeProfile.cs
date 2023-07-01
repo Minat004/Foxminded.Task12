@@ -6,7 +6,7 @@ namespace FinancialTime.WebAPI.Mappers;
 
 public class FinTypeProfile : Profile
 {
-    protected FinTypeProfile()
+    public FinTypeProfile()
     {
         CreateMap<FinType, FinTypeDto>()
             .ForMember(dto => dto.Name, 
