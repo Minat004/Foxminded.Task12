@@ -46,27 +46,33 @@ public class FinTypeController : ControllerBase
     }
 
     [HttpPost]
-    public async Task AddType([FromBody] FinTypeAddDto itemDto)
+    public async Task<ActionResult<FinTypeAddDto>> AddType([FromBody] FinTypeAddDto itemDto)
     {
         var item = _mapper.Map<FinType>(itemDto);
 
         await _typeService.AddAsync(item);
+
+        return CreatedAtAction(nameof(AddType), new { id = item.Id }, itemDto);
     }
 
     [HttpPut("{id:int}")]
-    public async Task EditType(int id, [FromBody] FinTypeEditDto itemDto)
+    public async Task<IActionResult> EditType(int id, [FromBody] FinTypeEditDto itemDto)
     {
         var newItem = _mapper.Map<FinType>(itemDto);
         newItem.Id = id;
 
         await _typeService.EditAsync(newItem);
+
+        return Ok();
     }
 
     [HttpDelete("{id:int}")]
-    public async Task DeleteType(int id)
+    public async Task<IActionResult> DeleteType(int id)
     {
         var item = await _typeService.GetByIdAsync(id);
 
         await _typeService.DeleteAsync(item);
+
+        return Ok();
     }
 }

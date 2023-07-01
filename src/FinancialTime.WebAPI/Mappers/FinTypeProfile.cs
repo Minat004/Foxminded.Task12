@@ -20,12 +20,14 @@ public class FinTypeProfile : Profile
             .ForMember(dto => dto.Name, expression =>
                 expression.MapFrom(src => src.Name))
             .ForMember(dto => dto.Budget, expression =>
-                expression.MapFrom(src => src.Budget));
+                expression.MapFrom(src => src.Budget))
+            .ReverseMap();
         
         CreateMap<FinType, FinTypeEditDto>()
             .ForMember(dto => dto.Name, expression =>
                 expression.MapFrom(src => src.Name))
             .ForMember(dto => dto.Budget, expression =>
-                expression.MapFrom(src => src.Budget));
+                expression.MapFrom(src => src.Budget))
+            .ReverseMap();
     }
 }
