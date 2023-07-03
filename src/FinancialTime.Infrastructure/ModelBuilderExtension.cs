@@ -15,11 +15,11 @@ public static class ModelBuilderExtension
             new FinType {Id = 4, Name = "Restaurants", Budget = EBudget.Expense});
 
         modelBuilder.Entity<FinOperation>().HasData(
-            new FinOperation {Id = 1, Value = 4000, FinTypeId = 1, Date = new DateTime(2023, 6, 10)},
-            new FinOperation {Id = 2, Value = 1000, FinTypeId = 2, Date = new DateTime(2023, 6, 10)},
-            new FinOperation {Id = 3, Value = 133, FinTypeId = 3, Date = new DateTime(2023, 6, 10)},
-            new FinOperation {Id = 4, Value = 100, FinTypeId = 4, Date = new DateTime(2023, 6, 10)},
-            new FinOperation {Id = 5, Value = 150, FinTypeId = 4, Date = new DateTime(2023, 6, 11)}
+            new FinOperation {Id = 1, Value = 4000M, FinTypeId = 1, Date = new DateTime(2023, 6, 10)},
+            new FinOperation {Id = 2, Value = 1000M, FinTypeId = 2, Date = new DateTime(2023, 6, 10)},
+            new FinOperation {Id = 3, Value = 133M, FinTypeId = 3, Date = new DateTime(2023, 6, 10)},
+            new FinOperation {Id = 4, Value = 100M, FinTypeId = 4, Date = new DateTime(2023, 6, 10)},
+            new FinOperation {Id = 5, Value = 150M, FinTypeId = 4, Date = new DateTime(2023, 6, 11)}
             );
     }
 }

@@ -4,7 +4,7 @@ namespace FinancialTime.WebAPI.DTOs.FinOperation;
 
 public class FinOperationDto
 {
-    public int Value { get; set; }
+    public decimal Value { get; set; }
 
     public DateTime Date { get; set; }
 

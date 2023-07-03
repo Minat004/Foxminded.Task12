@@ -36,8 +36,8 @@ namespace FinancialTime.Infrastructure.Migrations
                     b.Property<int>("FinTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Value")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -51,35 +51,35 @@ namespace FinancialTime.Infrastructure.Migrations
                             Id = 1,
                             Date = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FinTypeId = 1,
-                            Value = 4000
+                            Value = 4000m
                         },
                         new
                         {
                             Id = 2,
                             Date = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FinTypeId = 2,
-                            Value = 1000
+                            Value = 1000m
                         },
                         new
                         {
                             Id = 3,
                             Date = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FinTypeId = 3,
-                            Value = 133
+                            Value = 133m
                         },
                         new
                         {
                             Id = 4,
                             Date = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FinTypeId = 4,
-                            Value = 100
+                            Value = 100m
                         },
                         new
                         {
                             Id = 5,
                             Date = new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FinTypeId = 4,
-                            Value = 150
+                            Value = 150m
                         });
                 });
 

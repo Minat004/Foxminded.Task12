@@ -8,7 +8,8 @@ public class FinOperation
     [Key]
     public int Id { get; set; }
 
-    public int Value { get; set; }
+    [Column(TypeName = "decimal(18,2)")]
+    public decimal Value { get; set; }
 
     public DateTime Date { get; set; }
 
