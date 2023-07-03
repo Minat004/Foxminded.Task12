@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace FinancialTime.WebAPI;
@@ -54,7 +53,7 @@ public class GlobalErrorHandlingMiddleware
             return;
         }
         
-        if (exceptionType == typeof(BadRequestResult))
+        if (exceptionType == typeof(FormatException))
         {
             message = exception.Message;
             status = HttpStatusCode.BadRequest;
