@@ -20,7 +20,7 @@ public class FinTypeController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<FinTypeDto>> GetTypes()
+    public async Task<ActionResult<IEnumerable<FinTypeDto>>> GetTypesAsync()
     {
         var items = await _typeService.GetAllAsync();
         
@@ -31,32 +31,32 @@ public class FinTypeController : ControllerBase
 
         var finTypeList = _mapper.Map<IEnumerable<FinTypeDto>>(items);
 
-        return finTypeList;
+        return Ok(finTypeList);
     }
 
     [HttpGet("{id:int}")]
-    public async Task<FinTypeDto> GetTypeById(int id)
+    public async Task<ActionResult<FinTypeDto>> GetTypeByIdAsync(int id)
     {
         var item = await _typeService.GetByIdAsync(id);
         item.ListOperations = new List<FinOperation>(await _typeService.GetOperations(item));
     
         var finType = _mapper.Map<FinTypeDto>(item);
 
-        return finType;
+        return Ok(finType);
     }
 
     [HttpPost]
-    public async Task<ActionResult<FinTypeAddDto>> AddType([FromBody] FinTypeAddDto itemDto)
+    public async Task<ActionResult<FinTypeAddDto>> AddTypeAsync([FromBody] FinTypeAddDto itemDto)
     {
         var item = _mapper.Map<FinType>(itemDto);
 
         await _typeService.AddAsync(item);
 
-        return CreatedAtAction(nameof(AddType), new { id = item.Id }, itemDto);
+        return Ok(itemDto);
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> EditType(int id, [FromBody] FinTypeEditDto itemDto)
+    public async Task<IActionResult> EditTypeAsync(int id, [FromBody] FinTypeEditDto itemDto)
     {
         var newItem = _mapper.Map<FinType>(itemDto);
         newItem.Id = id;
@@ -67,7 +67,7 @@ public class FinTypeController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeleteType(int id)
+    public async Task<IActionResult> DeleteTypeAsync(int id)
     {
         var item = await _typeService.GetByIdAsync(id);
 

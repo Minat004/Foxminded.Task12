@@ -20,37 +20,42 @@ public class FinOperationController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<FinOperationDto>> GetOperations()
+    public async Task<ActionResult<IEnumerable<FinOperationDto>>> GetOperationsAsync()
     {
         var items = await _operationService.GetAllAsync();
 
+        if (!items.Any())
+        {
+            return NoContent();
+        }
+
         var finOperationList = _mapper.Map<IEnumerable<FinOperationDto>>(items);
 
-        return finOperationList;
+        return Ok(finOperationList);
     }
 
     [HttpGet("{id:int}")]
-    public async Task<FinOperationDto> GetOperationById(int id)
+    public async Task<ActionResult<FinOperationDto>> GetOperationByIdAsync(int id)
     {
         var item = await _operationService.GetByIdAsync(id);
 
         var finOperation = _mapper.Map<FinOperationDto>(item);
         
-        return finOperation;
+        return Ok(finOperation);
     }
 
     [HttpPost]
-    public async Task<ActionResult<FinOperationAddDto>> AddOperation([FromBody] FinOperationAddDto itemDto)
+    public async Task<ActionResult<FinOperationAddDto>> AddOperationAsync([FromBody] FinOperationAddDto itemDto)
     {
         var item = _mapper.Map<FinOperation>(itemDto);
 
         await _operationService.AddAsync(item);
 
-        return CreatedAtAction(nameof(AddOperation), new { id = item.Id }, itemDto);
+        return Ok(itemDto);
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> EditOperation(int id, [FromBody] FinOperationEditDto itemDto)
+    public async Task<IActionResult> EditOperationAsync(int id, [FromBody] FinOperationEditDto itemDto)
     {
         var newItem = _mapper.Map<FinOperation>(itemDto);
         newItem.Id = id;
@@ -61,7 +66,7 @@ public class FinOperationController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeleteOperation(int id)
+    public async Task<IActionResult> DeleteOperationAsync(int id)
     {
         var item = await _operationService.GetByIdAsync(id);
 

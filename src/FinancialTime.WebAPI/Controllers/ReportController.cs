@@ -19,27 +19,37 @@ public class ReportController : ControllerBase
     }
 
     [HttpGet("{date}")]
-    public async Task<ReportDateDto> GetForDate(string date)
+    public async Task<ActionResult<ReportDateDto>> GetForDateAsync(string date)
     {
         var dateTime = DateTime.Parse(date);
 
         var report = await _reportService.GetDateReport(dateTime);
+
+        if (!report.Operations!.Any())
+        {
+            return NotFound(date);
+        }
         
         var reportDto = _mapper.Map<ReportDateDto>(report);
         
-        return reportDto;
+        return Ok(reportDto);
     }
 
     [HttpGet("{startDate}/{endDate}")]
-    public async Task<ReportPeriodDto> GetForPeriod(string startDate, string endDate)
+    public async Task<ActionResult<ReportPeriodDto>> GetForPeriodAsync(string startDate, string endDate)
     {
         var startDateTime = DateTime.Parse(startDate);
         var endDateTime = DateTime.Parse(endDate);
         
         var report = await _reportService.GetPeriodReport(startDateTime, endDateTime);
         
+        if (!report.Operations!.Any())
+        {
+            return NotFound($"{startDate} - {endDate}");
+        }
+        
         var reportDto = _mapper.Map<ReportPeriodDto>(report);
 
-        return reportDto;
+        return Ok(reportDto);
     }
 }
