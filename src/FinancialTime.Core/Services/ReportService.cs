@@ -1,6 +1,6 @@
 ﻿using FinancialTime.Core.Enums;
 using FinancialTime.Core.Interfaces;
-using FinancialTime.Core.Models;
+using FinancialTime.Core.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinancialTime.Core.Services;
@@ -14,23 +14,23 @@ public class ReportService : IReportService
         _dbContext = dbContext;
     }
 
-    public async Task<Report> GetDateReport(DateTime date)
+    public async Task<ReportViewModel> GetDateReport(DateTime date)
     {
         var resultIncome = await _dbContext.FinOperations
-            .Where(x => x.Date == date && x.FinType.Budget == EBudget.Income)
+            .Where(x => x.Date.Date == date.Date && x.FinType.Budget == EBudget.Income)
             .Select(x => x.Value)
             .SumAsync();
         
         var resultExpense = await _dbContext.FinOperations
-            .Where(x => x.Date == date && x.FinType.Budget == EBudget.Expense)
+            .Where(x => x.Date.Date == date.Date && x.FinType.Budget == EBudget.Expense)
             .Select(x => x.Value)
             .SumAsync();
 
         var operations = await _dbContext.FinOperations
-            .Where(x => x.Date == date)
+            .Where(x => x.Date.Date == date.Date)
             .ToListAsync();
         
-        var report = new Report()
+        var report = new ReportViewModel()
         {
             StartDate = date,
             ResultIncome = resultIncome,
@@ -41,23 +41,25 @@ public class ReportService : IReportService
         return report;
     }
 
-    public async Task<Report> GetPeriodReport(DateTime startDate, DateTime endDate)
+    public async Task<ReportViewModel> GetPeriodReport(DateTime startDate, DateTime endDate)
     {
         var resultIncome = await _dbContext.FinOperations
-            .Where(x => x.Date >= startDate && x.Date <= endDate && x.FinType.Budget == EBudget.Income)
+            .Where(x => x.Date.Date >= startDate.Date && x.Date.Date <= endDate.Date
+                                                      && x.FinType.Budget == EBudget.Income)
             .Select(x => x.Value)
             .SumAsync();
         
         var resultExpense = await _dbContext.FinOperations
-            .Where(x => x.Date >= startDate && x.Date <= endDate && x.FinType.Budget == EBudget.Expense)
+            .Where(x => x.Date.Date >= startDate.Date && x.Date.Date <= endDate.Date
+                                                      && x.FinType.Budget == EBudget.Expense)
             .Select(x => x.Value)
             .SumAsync();
 
         var operations = await _dbContext.FinOperations
-            .Where(x => x.Date >= startDate && x.Date <= endDate)
+            .Where(x => x.Date.Date >= startDate.Date && x.Date.Date <= endDate.Date)
             .ToListAsync();
         
-        var report = new Report()
+        var report = new ReportViewModel()
         {
             StartDate = startDate,
             EndDate = endDate,

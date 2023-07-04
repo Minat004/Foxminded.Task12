@@ -1,6 +1,6 @@
-﻿using FinancialTime.WebAPI.DTOs.FinOperation;
+﻿using FinancialTime.Core.DTOs.FinOperation;
 
-namespace FinancialTime.WebAPI.DTOs.Report;
+namespace FinancialTime.Core.DTOs.Report;
 
 public class ReportDateDto
 {

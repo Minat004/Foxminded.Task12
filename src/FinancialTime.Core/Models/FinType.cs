@@ -13,5 +13,7 @@ public class FinType
 
     public EBudget Budget { get; set; }
 
+    public bool IsDelete { get; set; }
+
     public ICollection<FinOperation>? ListOperations { get; set; }
 }

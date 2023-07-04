@@ -1,7 +1,6 @@
-﻿using FinancialTime.Core.Enums;
-using FinancialTime.WebAPI.DTOs.FinOperation;
+﻿using FinancialTime.Core.DTOs.FinOperation;
 
-namespace FinancialTime.WebAPI.DTOs.FinType;
+namespace FinancialTime.Core.DTOs.FinType;
 
 public class FinTypeDto
 {

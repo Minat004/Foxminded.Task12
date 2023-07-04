@@ -1,6 +1,4 @@
-﻿using FinancialTime.Core.Models;
-
-namespace FinancialTime.WebAPI.DTOs.FinOperation;
+﻿namespace FinancialTime.Core.DTOs.FinOperation;
 
 public class FinOperationDto
 {

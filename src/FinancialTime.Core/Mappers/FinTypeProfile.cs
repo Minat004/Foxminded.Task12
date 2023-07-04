@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using FinancialTime.Core.DTOs.FinType;
 using FinancialTime.Core.Models;
-using FinancialTime.WebAPI.DTOs.FinType;
 
-namespace FinancialTime.WebAPI.Mappers;
+namespace FinancialTime.Core.Mappers;
 
 public class FinTypeProfile : Profile
 {

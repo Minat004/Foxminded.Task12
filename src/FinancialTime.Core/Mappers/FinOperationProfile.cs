@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using FinancialTime.Core.DTOs.FinOperation;
 using FinancialTime.Core.Models;
-using FinancialTime.WebAPI.DTOs.FinOperation;
 
-namespace FinancialTime.WebAPI.Mappers;
+namespace FinancialTime.Core.Mappers;
 
 public class FinOperationProfile : Profile
 {

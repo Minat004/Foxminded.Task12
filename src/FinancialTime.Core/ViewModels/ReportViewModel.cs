@@ -1,6 +1,8 @@
-﻿namespace FinancialTime.Core.Models;
+﻿using FinancialTime.Core.Models;
 
-public class Report
+namespace FinancialTime.Core.ViewModels;
+
+public class ReportViewModel
 {
     public DateTime? StartDate { get; set; }
 

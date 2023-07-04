@@ -13,6 +13,8 @@ public class FinOperation
 
     public DateTime Date { get; set; }
 
+    public bool IsDelete { get; set; }
+
     [ForeignKey(nameof(FinType))]
     public int FinTypeId { get; set; }
 
