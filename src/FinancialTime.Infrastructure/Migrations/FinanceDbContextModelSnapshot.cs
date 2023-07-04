@@ -36,6 +36,9 @@ namespace FinancialTime.Infrastructure.Migrations
                     b.Property<int>("FinTypeId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
                     b.Property<decimal>("Value")
                         .HasColumnType("decimal(18,2)");
 
@@ -51,6 +54,7 @@ namespace FinancialTime.Infrastructure.Migrations
                             Id = 1,
                             Date = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FinTypeId = 1,
+                            IsDelete = false,
                             Value = 4000m
                         },
                         new
@@ -58,6 +62,7 @@ namespace FinancialTime.Infrastructure.Migrations
                             Id = 2,
                             Date = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FinTypeId = 2,
+                            IsDelete = false,
                             Value = 1000m
                         },
                         new
@@ -65,6 +70,7 @@ namespace FinancialTime.Infrastructure.Migrations
                             Id = 3,
                             Date = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FinTypeId = 3,
+                            IsDelete = false,
                             Value = 133m
                         },
                         new
@@ -72,6 +78,7 @@ namespace FinancialTime.Infrastructure.Migrations
                             Id = 4,
                             Date = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FinTypeId = 4,
+                            IsDelete = false,
                             Value = 100m
                         },
                         new
@@ -79,6 +86,7 @@ namespace FinancialTime.Infrastructure.Migrations
                             Id = 5,
                             Date = new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FinTypeId = 4,
+                            IsDelete = false,
                             Value = 150m
                         });
                 });
@@ -94,6 +102,9 @@ namespace FinancialTime.Infrastructure.Migrations
                     b.Property<int>("Budget")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -108,24 +119,28 @@ namespace FinancialTime.Infrastructure.Migrations
                         {
                             Id = 1,
                             Budget = 0,
+                            IsDelete = false,
                             Name = "Salary"
                         },
                         new
                         {
                             Id = 2,
                             Budget = 1,
+                            IsDelete = false,
                             Name = "Products"
                         },
                         new
                         {
                             Id = 3,
                             Budget = 1,
+                            IsDelete = false,
                             Name = "Fun"
                         },
                         new
                         {
                             Id = 4,
                             Budget = 1,
+                            IsDelete = false,
                             Name = "Restaurants"
                         });
                 });
