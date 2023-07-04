@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using FinancialTime.Core.Interfaces;
+using FinancialTime.Core.Mappers;
 using FinancialTime.Core.Models;
+using FinancialTime.Core.ViewModels;
 using FinancialTime.WebAPI.Controllers;
-using FinancialTime.WebAPI.Mappers;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -29,7 +30,7 @@ public class ReportControllerTests
         var mockReportService = new Mock<IReportService>();
         mockReportService
             .Setup(x => x.GetDateReport(It.IsAny<DateTime>()))
-            .ReturnsAsync(It.IsAny<Report>());
+            .ReturnsAsync(It.IsAny<ReportViewModel>());
         
         var controller = new ReportController(mockReportService.Object, _mockOperationMapper.CreateMapper());
 
@@ -52,7 +53,7 @@ public class ReportControllerTests
         var mockReportService = new Mock<IReportService>();
         mockReportService
             .Setup(x => x.GetPeriodReport(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-            .ReturnsAsync(It.IsAny<Report>());
+            .ReturnsAsync(It.IsAny<ReportViewModel>());
         
         var controller = new ReportController(mockReportService.Object, _mockOperationMapper.CreateMapper());
 

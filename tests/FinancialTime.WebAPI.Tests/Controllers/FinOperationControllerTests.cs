@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
+using FinancialTime.Core.DTOs.FinOperation;
 using FinancialTime.Core.Interfaces;
-using FinancialTime.Core.Models;
+using FinancialTime.Core.Mappers;
 using FinancialTime.WebAPI.Controllers;
-using FinancialTime.WebAPI.DTOs.FinOperation;
-using FinancialTime.WebAPI.Mappers;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -29,7 +28,7 @@ public class FinOperationControllerTests
             .Setup(x => x.GetAllAsync())
             .ReturnsAsync(MockData.GetOperations());
         
-        var controller = new FinOperationController(mockOperationService.Object, _mockOperationMapper.CreateMapper());
+        var controller = new FinOperationController(mockOperationService.Object);
 
         // Act
         var actionResult = await controller.GetOperationsAsync();
@@ -49,10 +48,10 @@ public class FinOperationControllerTests
         var mockOperationService = new Mock<IOperationService>();
         mockOperationService
             .Setup(x => x.GetAllAsync())
-            .ReturnsAsync(new List<FinOperation>());
+            .ReturnsAsync(new List<FinOperationDto>());
 
 
-        var controller = new FinOperationController(mockOperationService.Object, _mockOperationMapper.CreateMapper());
+        var controller = new FinOperationController(mockOperationService.Object);
 
         // Act
         var actionResult = await controller.GetOperationsAsync();
@@ -69,10 +68,10 @@ public class FinOperationControllerTests
         var mockOperationService = new Mock<IOperationService>();
         mockOperationService
             .Setup(x => x.GetByIdAsync(It.IsAny<int>()))
-            .ReturnsAsync(It.IsAny<FinOperation>());
+            .ReturnsAsync(It.IsAny<FinOperationDto>());
 
 
-        var controller = new FinOperationController(mockOperationService.Object, _mockOperationMapper.CreateMapper());
+        var controller = new FinOperationController(mockOperationService.Object);
 
         // Act
         var actionResult = await controller.GetOperationByIdAsync(It.IsAny<int>());
@@ -89,14 +88,15 @@ public class FinOperationControllerTests
         // Arrange
         var mockOperationService = new Mock<IOperationService>();
 
-        var controller = new FinOperationController(mockOperationService.Object, _mockOperationMapper.CreateMapper());
+        var controller = new FinOperationController(mockOperationService.Object);
 
         // Act
         var actionResult = await controller.AddOperationAsync(It.IsAny<FinOperationAddDto>());
         var result = actionResult.Result as OkObjectResult;
 
         // Assert
-        mockOperationService.Verify(x => x.AddAsync(It.IsAny<FinOperation>()), Times.Once);
+        mockOperationService.Verify(x => 
+            x.AddAsync(It.IsAny<FinOperationAddDto>()), Times.Once);
         
         result.Should().NotBeNull();
         result!.StatusCode.Should().Be(200);
@@ -108,14 +108,15 @@ public class FinOperationControllerTests
         // Arrange
         var mockOperationService = new Mock<IOperationService>();
 
-        var controller = new FinOperationController(mockOperationService.Object, _mockOperationMapper.CreateMapper());
+        var controller = new FinOperationController(mockOperationService.Object);
 
         // Act
         var actionResult = await controller.EditOperationAsync(It.IsAny<int>(), MockData.GetOperationEditDto());
         var result = actionResult as OkResult;
 
         // Assert
-        mockOperationService.Verify(x => x.EditAsync(It.IsAny<FinOperation>()), Times.Once);
+        mockOperationService.Verify(x => 
+            x.EditAsync(It.IsAny<int>(), It.IsAny<FinOperationEditDto>()), Times.Once);
         
         result.Should().NotBeNull();
         result!.StatusCode.Should().Be(200);
@@ -127,14 +128,14 @@ public class FinOperationControllerTests
         // Arrange
         var mockOperationService = new Mock<IOperationService>();
 
-        var controller = new FinOperationController(mockOperationService.Object, _mockOperationMapper.CreateMapper());
+        var controller = new FinOperationController(mockOperationService.Object);
 
         // Act
         var actionResult = await controller.DeleteOperationAsync(It.IsAny<int>());
         var result = actionResult as OkResult;
 
         // Assert
-        mockOperationService.Verify(x => x.DeleteAsync(It.IsAny<FinOperation>()), Times.Once);
+        mockOperationService.Verify(x => x.DeleteAsync(It.IsAny<int>()), Times.Once);
         
         result.Should().NotBeNull();
         result!.StatusCode.Should().Be(200);
