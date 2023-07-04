@@ -1,7 +1,7 @@
 using FinancialTime.Core;
+using FinancialTime.Core.Mappers;
 using FinancialTime.Infrastructure;
 using FinancialTime.WebAPI;
-using FinancialTime.WebAPI.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 

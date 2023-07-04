@@ -1,6 +1,6 @@
 using AutoMapper;
+using FinancialTime.Core.DTOs.Report;
 using FinancialTime.Core.Interfaces;
-using FinancialTime.WebAPI.DTOs.Report;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinancialTime.WebAPI.Controllers;
@@ -19,7 +19,7 @@ public class ReportController : ControllerBase
     }
 
     [HttpGet("{date}")]
-    public async Task<ActionResult<ReportDateDto>> GetForDateAsync(string date)
+    public async Task<ActionResult<ReportDateDto>> GetForDateAsync([FromRoute] string date)
     {
         var dateTime = DateTime.Parse(date);
 
@@ -36,7 +36,9 @@ public class ReportController : ControllerBase
     }
 
     [HttpGet("{startDate}/{endDate}")]
-    public async Task<ActionResult<ReportPeriodDto>> GetForPeriodAsync(string startDate, string endDate)
+    public async Task<ActionResult<ReportPeriodDto>> GetForPeriodAsync(
+        [FromRoute] string startDate, 
+        [FromRoute] string endDate)
     {
         var startDateTime = DateTime.Parse(startDate);
         var endDateTime = DateTime.Parse(endDate);

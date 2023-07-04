@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using FinancialTime.Core.Exceptions;
 using Newtonsoft.Json;
 
 namespace FinancialTime.WebAPI;
@@ -57,6 +58,14 @@ public class GlobalErrorHandlingMiddleware
         {
             message = exception.Message;
             status = HttpStatusCode.BadRequest;
+            stackTrace = exception.StackTrace;
+            return;
+        }
+        
+        if (exceptionType == typeof(RemoveNotEmptyTypeException))
+        {
+            message = exception.Message;
+            status = HttpStatusCode.Conflict;
             stackTrace = exception.StackTrace;
         }
     }

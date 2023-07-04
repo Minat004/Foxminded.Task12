@@ -1,7 +1,5 @@
-using AutoMapper;
+using FinancialTime.Core.DTOs.FinOperation;
 using FinancialTime.Core.Interfaces;
-using FinancialTime.Core.Models;
-using FinancialTime.WebAPI.DTOs.FinOperation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinancialTime.WebAPI.Controllers;
@@ -11,12 +9,10 @@ namespace FinancialTime.WebAPI.Controllers;
 public class FinOperationController : ControllerBase
 {
     private readonly IOperationService _operationService;
-    private readonly IMapper _mapper;
 
-    public FinOperationController(IOperationService operationService, IMapper mapper)
+    public FinOperationController(IOperationService operationService)
     {
         _operationService = operationService;
-        _mapper = mapper;
     }
 
     [HttpGet]
@@ -24,53 +20,47 @@ public class FinOperationController : ControllerBase
     {
         var items = await _operationService.GetAllAsync();
 
-        if (!items.Any())
-        {
-            return NoContent();
-        }
-
-        var finOperationList = _mapper.Map<IEnumerable<FinOperationDto>>(items);
-
-        return Ok(finOperationList);
+        return Ok(items);
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<FinOperationDto>> GetOperationByIdAsync(int id)
+    public async Task<ActionResult<FinOperationDto>> GetOperationByIdAsync([FromRoute] int id)
     {
         var item = await _operationService.GetByIdAsync(id);
-
-        var finOperation = _mapper.Map<FinOperationDto>(item);
         
-        return Ok(finOperation);
+        return Ok(item);
     }
 
     [HttpPost]
     public async Task<ActionResult<FinOperationAddDto>> AddOperationAsync([FromBody] FinOperationAddDto itemDto)
     {
-        var item = _mapper.Map<FinOperation>(itemDto);
-
-        await _operationService.AddAsync(item);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
+        await _operationService.AddAsync(itemDto);
 
         return Ok(itemDto);
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> EditOperationAsync(int id, [FromBody] FinOperationEditDto itemDto)
+    public async Task<IActionResult> EditOperationAsync([FromRoute] int id, [FromBody] FinOperationEditDto itemDto)
     {
-        var newItem = _mapper.Map<FinOperation>(itemDto);
-        newItem.Id = id;
-
-        await _operationService.EditAsync(newItem);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
+        await _operationService.EditAsync(id, itemDto);
 
         return Ok();
     }
 
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeleteOperationAsync(int id)
+    public async Task<IActionResult> DeleteOperationAsync([FromRoute] int id)
     {
-        var item = await _operationService.GetByIdAsync(id);
-
-        await _operationService.DeleteAsync(item);
+        await _operationService.DeleteAsync(id);
 
         return Ok();
     }
