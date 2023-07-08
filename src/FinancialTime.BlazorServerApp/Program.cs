@@ -1,13 +1,26 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using FinancialTime.BlazorServerApp.Clients;
 using FinancialTime.BlazorServerApp.Data;
+using FinancialTime.BlazorServerApp.Interfaces;
+using FinancialTime.BlazorServerApp.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<FinanceConfiguration>(builder.Configuration.GetSection(FinanceConfiguration.Configuration));
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+
+builder.Services.AddHttpClient<ICategoryClient, CategoryClient>((serviceProvider, client) =>
+{
+    client.BaseAddress = new Uri(serviceProvider.GetConfiguration<FinanceConfiguration>().TypeUrl!);
+});
+
+builder.Services.AddHttpClient<IHistoryClient, HistoryClient>((serviceProvider, client) =>
+{
+    client.BaseAddress = new Uri(serviceProvider.GetConfiguration<FinanceConfiguration>().OperationUrl!);
+});
 
 var app = builder.Build();
 
