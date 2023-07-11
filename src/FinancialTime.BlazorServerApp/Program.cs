@@ -1,5 +1,4 @@
 using FinancialTime.BlazorServerApp.Clients;
-using FinancialTime.BlazorServerApp.Data;
 using FinancialTime.BlazorServerApp.Interfaces;
 using FinancialTime.BlazorServerApp.Settings;
 
@@ -10,7 +9,6 @@ builder.Services.Configure<FinanceConfiguration>(builder.Configuration.GetSectio
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
 
 builder.Services.AddHttpClient<ICategoryClient, CategoryClient>((serviceProvider, client) =>
 {
