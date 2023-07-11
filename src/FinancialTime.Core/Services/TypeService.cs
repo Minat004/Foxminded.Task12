@@ -62,7 +62,9 @@ public class TypeService : ITypeService
 
     public async Task EditAsync(int id, FinTypeEditDto itemDto)
     {
-        if (await _dbContext.FinTypes.FirstOrDefaultAsync(x => x.Id == id) is null)
+        var item = await _dbContext.FinTypes.FirstOrDefaultAsync(x => x.Id == id);
+        
+        if (item is null)
         {
             throw new NullReferenceException();
         }
@@ -71,10 +73,10 @@ public class TypeService : ITypeService
         {
             throw new DuplicateTypeNameException(itemDto.Name);
         }
+
+        item.Name = itemDto.Name;
+        item.Budget = itemDto.Budget;
         
-        var item = _mapper.Map<FinType>(itemDto);
-        
-        _dbContext.FinTypes.Update(item);
         await _dbContext.SaveChangesAsync();
     }
 
@@ -87,14 +89,13 @@ public class TypeService : ITypeService
             throw new NullReferenceException();
         }
 
-        if (!item.ListOperations!.Any())
+        if (item.ListOperations is not null && !item.ListOperations.Any())
         {
             throw new RemoveNotEmptyTypeException();
         }
 
         item.IsDelete = true;
         
-        _dbContext.FinTypes.Update(item);
         await _dbContext.SaveChangesAsync();
     }
 
