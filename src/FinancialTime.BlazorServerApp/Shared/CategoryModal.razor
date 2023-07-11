@@ -1,0 +1,32 @@
+﻿<div class="modal fade show" 
+     style="display:block; background-color: rgba(10,10,10,.8);"
+     aria-modal="true" 
+     role="dialog"
+     @onclick="Close">
+    <div class="modal-dialog" @onclick:stopPropagation="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">This is the title</h4>
+                <button type="button" class="btn btn-outline-danger" @onclick="Close">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>This is the message text.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+    private async Task Close()
+    {
+        await OnClose.InvokeAsync(true);
+    }
+}

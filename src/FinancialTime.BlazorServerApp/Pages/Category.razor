@@ -5,7 +5,16 @@
 
 <PageTitle>Categories</PageTitle>
 
-<h3>Category</h3>
+<div class="container">
+    <div class="row">
+        <div class="col-md-auto">
+            <h3>Category</h3>
+        </div>
+        <div class="col-md-auto">
+            <button type="button" class="btn btn-primary" @onclick="OpenModal">Add</button>
+        </div>
+    </div>
+</div>
     
 @if (typeDtos is null)
 {
@@ -23,6 +32,7 @@ else
             <th>Number</th>
             <th>Name</th>
             <th>Income/Expense</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -33,17 +43,41 @@ else
                 <td>@num</td>
                 <td>@typeDtos[i].Name</td>
                 <td>@typeDtos[i].Budget</td>
+                <td>
+                    <button type="button" class="btn btn-primary">Edit</button>
+                    <button type="button" class="btn btn-danger">Delete</button>
+                </td>
             </tr>
         }
         </tbody>
     </table>
 }
 
+@if (IsOpenDialog)
+{
+    <CategoryModal OnClose="OnOpenModalClose"/>
+}
+
 @code {
     private List<FinTypeDto>? typeDtos;
+    private bool IsOpenDialog;
 
     protected override async Task OnInitializedAsync()
     {
         typeDtos = new List<FinTypeDto>((await Client.GetAllAsync())!);
+    }
+
+    private async Task OpenModal()
+    {
+        IsOpenDialog = true;
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+
+    private async Task OnOpenModalClose()
+    {
+        IsOpenDialog = false;
+        StateHasChanged();
+        await Task.CompletedTask;
     }
 }
