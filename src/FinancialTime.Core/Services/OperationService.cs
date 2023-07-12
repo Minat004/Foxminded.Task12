@@ -54,14 +54,17 @@ public class OperationService : IOperationService
 
     public async Task EditAsync(int id, FinOperationEditDto itemDto)
     {
-        if (await _dbContext.FinOperations.FirstOrDefaultAsync(x => x.Id == id) is null)
+        var item = await _dbContext.FinOperations.FirstOrDefaultAsync(x => x.Id == id);
+        
+        if (item is null)
         {
             throw new NullReferenceException();
         }
+
+        item.Value = itemDto.Value;
+        item.Date = itemDto.Date;
+        item.FinTypeId = itemDto.FinTypeId;
         
-        var item = _mapper.Map<FinOperation>(itemDto);
-        
-        _dbContext.FinOperations.Update(item);
         await _dbContext.SaveChangesAsync();
     }
 

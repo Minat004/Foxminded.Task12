@@ -83,6 +83,7 @@
     {
         var finOperationDto = new FinOperationDto()
         {
+            Id = Operation!.Id,
             Date = DateTime.Parse(_operationDate!),
             Value = _operationValue,
             FinTypeId = _selectedCategoryId
