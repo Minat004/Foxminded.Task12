@@ -1,6 +1,7 @@
 ﻿@using FinancialTime.Core.DTOs.FinOperation
 @using FinancialTime.Core.DTOs.FinType
 @using System.Globalization
+
 <div class="modal fade show"
      aria-modal="true" 
      role="dialog"
@@ -16,8 +17,13 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label for="date" class="col-form-label">Date:</label>
-                        <input type="text" class="form-control" id="date" @bind="_operationDate">
+                        <label class="col-form-label">Date:</label>
+                        <RadzenDatePicker class="w-100" @bind-Value="@_operationDate">
+                            <FooterTemplate>
+                                <RadzenButton Click="@(() => _operationDate = DateTime.Now)" Text="Today" class="my-3 w-100" />
+                            </FooterTemplate>
+                        </RadzenDatePicker>
+                        
                     </div>
                     <div class="form-group">
                         <label for="value" class="col-form-label">Value:</label>
@@ -57,7 +63,7 @@
 
     private int _selectedCategoryId;
 
-    private string? _operationDate;
+    private DateTime _operationDate;
 
     private decimal _operationValue;
 
@@ -65,7 +71,7 @@
     {
         _selectedCategoryId = Categories!.First().Id;
 
-        _operationDate = Operation!.Date.ToString(CultureInfo.InvariantCulture);
+        _operationDate = Operation!.Date;
 
         _operationValue = Operation.Value;
 
@@ -84,7 +90,7 @@
         var finOperationDto = new FinOperationDto()
         {
             Id = Operation!.Id,
-            Date = DateTime.Parse(_operationDate!),
+            Date = _operationDate,
             Value = _operationValue,
             FinTypeId = _selectedCategoryId
         };

@@ -20,6 +20,11 @@ builder.Services.AddHttpClient<IHistoryClient, HistoryClient>((serviceProvider, 
     client.BaseAddress = new Uri(serviceProvider.GetConfiguration<FinanceConfiguration>().OperationUrl!);
 });
 
+builder.Services.AddHttpClient<IReportClient, ReportClient>((serviceProvider, client) =>
+{
+    client.BaseAddress = new Uri(serviceProvider.GetConfiguration<FinanceConfiguration>().ReportUrl!);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
