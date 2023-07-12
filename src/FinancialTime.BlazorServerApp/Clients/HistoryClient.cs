@@ -27,11 +27,11 @@ public class HistoryClient : IHistoryClient
 
     public async Task UpdateAsync(int id, FinOperationEditDto item)
     {
-        await _httpClient.PutAsJsonAsync($"{id}", item);
+        var response = await _httpClient.PutAsJsonAsync($"{id}", item);
     }
 
     public async Task DeleteAsync(int id)
     {
-        await _httpClient.DeleteAsync($"{id}");
+        var response = await _httpClient.DeleteAsync($"{id}");
     }
 }

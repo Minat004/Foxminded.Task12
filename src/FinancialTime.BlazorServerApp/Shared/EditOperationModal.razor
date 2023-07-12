@@ -1,0 +1,93 @@
+﻿@using FinancialTime.Core.DTOs.FinOperation
+@using FinancialTime.Core.DTOs.FinType
+@using System.Globalization
+<div class="modal fade show"
+     aria-modal="true" 
+     role="dialog"
+     @onclick="Close">
+    <div class="modal-dialog" @onclick:stopPropagation="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit operation</h4>
+                <button type="button" class="btn btn-outline-danger" @onclick="Close">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="date" class="col-form-label">Date:</label>
+                        <input type="text" class="form-control" id="date" @bind="_operationDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="value" class="col-form-label">Value:</label>
+                        <input type="text" class="form-control" id="value" @bind="_operationValue">
+                    </div>
+                    <div class="form-group">
+                        <label for="category" class="col-form-label">Category:</label>
+                        <select class="form-select" id="category" @bind="_selectedCategoryId">
+                            @foreach (var category in Categories!)
+                            {
+                                <option value="@category.Id">@category.Name</option>
+                            }
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="Submit">Edit</button>
+                <button type="button" class="btn btn-outline-primary" @onclick="Close">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+    [Parameter]
+    public EventCallback<FinOperationDto> OnSubmit { get; set; }
+
+    [Parameter]
+    public IEnumerable<FinTypeDto>? Categories { get; set; }
+
+    [Parameter]
+    public FinOperationDto? Operation { get; set; }
+
+    private int _selectedCategoryId;
+
+    private string? _operationDate;
+
+    private decimal _operationValue;
+
+    protected override Task OnInitializedAsync()
+    {
+        _selectedCategoryId = Categories!.First().Id;
+
+        _operationDate = Operation!.Date.ToString(CultureInfo.InvariantCulture);
+
+        _operationValue = Operation.Value;
+
+        _selectedCategoryId = Operation.FinTypeId;
+        
+        return base.OnInitializedAsync();
+    }
+
+    private async Task Close()
+    {
+        await OnClose.InvokeAsync(true);
+    }
+
+    private async Task Submit()
+    {
+        var finOperationDto = new FinOperationDto()
+        {
+            Date = DateTime.Parse(_operationDate!),
+            Value = _operationValue,
+            FinTypeId = _selectedCategoryId
+        };
+
+        await OnSubmit.InvokeAsync(finOperationDto);
+    }
+}

@@ -1,7 +1,9 @@
 ﻿@page "/history"
 @using FinancialTime.Core.DTOs.FinOperation
 @using FinancialTime.BlazorServerApp.Interfaces
-@inject IHistoryClient Client
+@using FinancialTime.Core.DTOs.FinType
+@inject ICategoryClient CategoryClient
+@inject IHistoryClient HistoryClient
 
 <PageTitle>History of operations</PageTitle>
 
@@ -11,12 +13,12 @@
             <h3>History of operations</h3>
         </div>
         <div class="col-md-auto">
-            <button type="button" class="btn btn-primary">Add</button>
+            <button type="button" class="btn btn-primary" @onclick="OpenAddModal">Add</button>
         </div>
     </div>
 </div>
 
-@if (operationDtos is null)
+@if (_operationDtos is null)
 {
     <div class="progress">
         <div class="progress-bar progress-bar-striped progress-bar-animated" 
@@ -38,18 +40,29 @@ else
         </tr>
         </thead>
         <tbody>
-        @for (var i = 0; i < operationDtos!.Count; i++)
+        @{
+            var num = 0;
+        }
+        @foreach (var operationDto in _operationDtos)
         {
-            var num = i + 1;
+            num++;
             <tr>
                 <td>@num</td>
-                <td>@operationDtos[i].Date</td>
-                <td>@operationDtos[i].Value</td>
-                <td>@operationDtos[i].FinTypeName</td>
-                <td>@operationDtos[i].FinTypeBudget</td>
+                <td>@operationDto.Date</td>
+                <td>@operationDto.Value</td>
+                <td>@operationDto.FinTypeName</td>
+                <td>@operationDto.FinTypeBudget</td>
                 <td>
-                    <button type="button" class="btn btn-primary">Edit</button>
-                    <button type="button" class="btn btn-danger">Delete</button>
+                    <button type="button"
+                            class="btn btn-primary"
+                            @onclick="async () => await OpenEditModal(operationDto)">
+                        Edit
+                    </button>
+                    <button type="button"
+                            class="btn btn-danger"
+                            @onclick="async () => await OpenDeleteDialogModal(operationDto.Id)">
+                        Delete
+                    </button>
                 </td>
             </tr>
         }
@@ -57,11 +70,128 @@ else
     </table>
 }
 
+@if (IsOpenAddModal)
+{
+    <AddOperationModal OnClose="CloseAddModal"
+                       OnSubmit="SubmitAddModal"
+                       Categories="_categories"/>
+}
+
+@if (IsOpenEditModal)
+{
+    <EditOperationModal OnClose="CloseEditModal"
+                        OnSubmit="SubmitEditModal"
+                        Categories="_categories"
+                        Operation="_selected"/>
+}
+
+@if (IsOpenDeleteDialogModal)
+{
+    <DialogModal Title="Delete operation"
+                 Body="Are you sure delete operation from history?"
+                 Id="_selectedId"
+                 OnClose="CloseDeleteDialogModal"
+                 OnSubmit="SubmitDeleteDialogModal"/>
+}
+
 @code {
-    private List<FinOperationDto>? operationDtos;
+    private List<FinOperationDto>? _operationDtos;
+
+    private IEnumerable<FinTypeDto>? _categories;
+
+    private FinOperationDto? _selected;
+
+    private int _selectedId;
+    
+    private bool IsOpenAddModal;
+
+    private bool IsOpenEditModal;
+
+    private bool IsOpenDeleteDialogModal;
 
     protected override async Task OnInitializedAsync()
     {
-        operationDtos = new List<FinOperationDto>((await Client.GetAllAsync())!);
+        _categories = await CategoryClient.GetAllAsync();
+        _operationDtos = new List<FinOperationDto>((await HistoryClient.GetAllAsync())!);
+    }
+    
+    private async Task OpenAddModal()
+    {
+        IsOpenAddModal = true;
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+
+    private async Task CloseAddModal()
+    {
+        IsOpenAddModal = false;
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+    
+    private async Task SubmitAddModal(FinOperationAddDto finOperationAddDto)
+    {
+        IsOpenAddModal = false;
+        StateHasChanged();
+
+        await HistoryClient.AddAsync(finOperationAddDto);
+        
+        _operationDtos = new List<FinOperationDto>((await HistoryClient.GetAllAsync())!);
+    }
+    
+    private async Task OpenEditModal(FinOperationDto? operationDto)
+    {
+        _selected = operationDto;
+        
+        IsOpenEditModal = true;
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+
+    private async Task CloseEditModal()
+    {
+        IsOpenEditModal = false;
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+    
+    private async Task SubmitEditModal(FinOperationDto operationDto)
+    {
+        IsOpenEditModal = false;
+        StateHasChanged();
+
+        var finOperationEditDto = new FinOperationEditDto()
+        {
+            Value = operationDto.Value,
+            Date = operationDto.Date,
+            FinTypeId = operationDto.FinTypeId
+        };
+
+        await HistoryClient.UpdateAsync(operationDto.Id, finOperationEditDto);
+        
+        _operationDtos = new List<FinOperationDto>((await HistoryClient.GetAllAsync())!);
+    }
+    
+    private async Task OpenDeleteDialogModal(int id)
+    {
+        _selectedId = id;
+        IsOpenDeleteDialogModal = true;
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+
+    private async Task CloseDeleteDialogModal()
+    {
+        IsOpenDeleteDialogModal = false;
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+    
+    private async Task SubmitDeleteDialogModal(int id)
+    {
+        IsOpenDeleteDialogModal = false;
+        StateHasChanged();
+        await HistoryClient.DeleteAsync(id);
+        _operationDtos = new List<FinOperationDto>((await HistoryClient.GetAllAsync())!);
     }
 }
