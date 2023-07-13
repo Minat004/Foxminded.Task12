@@ -20,8 +20,8 @@ public class OperationService : IOperationService
     public async Task<IEnumerable<FinOperationDto>> GetAllAsync()
     {
         var items = await _dbContext.FinOperations
-            .Where(x => !x.IsDelete)
             .Include(x => x.FinType)
+            .Where(x => !x.IsDelete)
             .ToListAsync();
         
         var itemDtos = _mapper.Map<IEnumerable<FinOperationDto>>(items);
@@ -32,6 +32,7 @@ public class OperationService : IOperationService
     public async Task<FinOperationDto> GetByIdAsync(int id)
     {
         var item = await _dbContext.FinOperations
+            .Include(x => x.FinType)
             .FirstOrDefaultAsync(x => x.Id == id && !x.IsDelete);
 
         if (item is null)

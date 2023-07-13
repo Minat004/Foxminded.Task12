@@ -1,4 +1,5 @@
-﻿using FinancialTime.BlazorServerApp.Interfaces;
+﻿using System.Globalization;
+using FinancialTime.BlazorServerApp.Interfaces;
 using FinancialTime.Core.DTOs.Report;
 using Newtonsoft.Json;
 
