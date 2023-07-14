@@ -12,17 +12,17 @@ builder.Services.AddServerSideBlazor();
 
 builder.Services.AddHttpClient<ICategoryClient, CategoryClient>((serviceProvider, client) =>
 {
-    client.BaseAddress = new Uri(serviceProvider.GetConfiguration<FinanceConfiguration>().TypeUrl!);
+    client.BaseAddress = new Uri(serviceProvider.GetConfiguration<FinanceConfiguration>().BaseUrl!);
 });
 
 builder.Services.AddHttpClient<IHistoryClient, HistoryClient>((serviceProvider, client) =>
 {
-    client.BaseAddress = new Uri(serviceProvider.GetConfiguration<FinanceConfiguration>().OperationUrl!);
+    client.BaseAddress = new Uri(serviceProvider.GetConfiguration<FinanceConfiguration>().BaseUrl!);
 });
 
 builder.Services.AddHttpClient<IReportClient, ReportClient>((serviceProvider, client) =>
 {
-    client.BaseAddress = new Uri(serviceProvider.GetConfiguration<FinanceConfiguration>().ReportUrl!);
+    client.BaseAddress = new Uri(serviceProvider.GetConfiguration<FinanceConfiguration>().BaseUrl!);
 });
 
 var app = builder.Build();
