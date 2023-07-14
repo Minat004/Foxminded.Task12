@@ -14,33 +14,35 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <EditForm Model="Operation" OnValidSubmit="Submit">
+                    <DataAnnotationsValidator/>
+                    <ValidationSummary/>
                     <div class="form-group">
                         <label class="col-form-label">Date:</label>
-                        <RadzenDatePicker class="w-100" @bind-Value="@_operationDate">
+                        <RadzenDatePicker class="w-100" @bind-Value="Operation.Date">
                             <FooterTemplate>
-                                <RadzenButton Click="@(() => _operationDate = DateTime.Now)" Text="Today" class="my-3 w-100" />
+                                <RadzenButton Click="@(() => Operation.Date = DateTime.Now)" Text="Today" class="my-3 w-100"/>
                             </FooterTemplate>
                         </RadzenDatePicker>
                     </div>
                     <div class="form-group">
                         <label for="value" class="col-form-label">Value:</label>
-                        <input type="text" class="form-control" id="value" @bind="_operationValue">
+                        <InputNumber @bind-Value="Operation.Value" class="form-control" id="value"/>
                     </div>
                     <div class="form-group">
                         <label for="category" class="col-form-label">Category:</label>
-                        <select class="form-select" id="category" @bind="_selectedCategoryId">
+                        <select class="form-select" id="category" @bind="Operation.FinTypeId">
                             @foreach (var category in Categories!)
                             {
                                 <option value="@category.Id">@category.Name</option>
                             }
                         </select>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" @onclick="Submit">Add</button>
-                <button type="button" class="btn btn-outline-primary" @onclick="Close">Cancel</button>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Add</button>
+                        <button type="button" class="btn btn-outline-primary" @onclick="Close">Cancel</button>
+                    </div>
+                </EditForm>
             </div>
         </div>
     </div>
@@ -56,17 +58,13 @@
     [Parameter]
     public IEnumerable<FinTypeDto>? Categories { get; set; }
 
-    private int _selectedCategoryId;
-
-    private DateTime _operationDate;
-
-    private decimal _operationValue;
+    private FinOperationAddDto Operation = new();
 
     protected override Task OnInitializedAsync()
     {
-        _selectedCategoryId = Categories!.First().Id;
+        Operation.FinTypeId = Categories!.First().Id;
         
-        _operationDate = DateTime.Now;
+        Operation.Date = DateTime.Now;
         
         return base.OnInitializedAsync();
     }
@@ -78,12 +76,7 @@
 
     private async Task Submit()
     {
-        var finOperationAddDto = new FinOperationAddDto
-        {
-            Date = _operationDate,
-            Value = _operationValue,
-            FinTypeId = _selectedCategoryId
-        };
+        var finOperationAddDto = Operation;
 
         await OnSubmit.InvokeAsync(finOperationAddDto);
     }
