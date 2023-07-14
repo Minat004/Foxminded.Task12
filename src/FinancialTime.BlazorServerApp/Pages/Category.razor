@@ -157,7 +157,6 @@ else
         };
 
         await Client.UpdateAsync(finTypeDto.Id, finTypeEditDto);
-        
         _typeDtos = new List<FinTypeDto>((await Client.GetAllAsync())!);
     }
     
