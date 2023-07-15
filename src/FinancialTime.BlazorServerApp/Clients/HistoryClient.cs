@@ -33,17 +33,27 @@ public class HistoryClient : IHistoryClient
         return JsonConvert.DeserializeObject<FinOperationAddDto>(await response.Content.ReadAsStringAsync());
     }
 
-    public async Task UpdateAsync(int id, FinOperationEditDto item)
+    public async Task<bool> UpdateAsync(int id, FinOperationEditDto item)
     {
         var response = await _httpClient.PutAsJsonAsync($"{_finOperationUrl}{id}", item);
-        
-        if (!response.IsSuccessStatusCode) { }
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return await Task.FromResult(false);
+        }
+
+        return await Task.FromResult(true);
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
         var response = await _httpClient.DeleteAsync($"{_finOperationUrl}{id}");
         
-        if (!response.IsSuccessStatusCode) { }
+        if (!response.IsSuccessStatusCode)
+        {
+            return await Task.FromResult(false);
+        }
+
+        return await Task.FromResult(true);
     }
 }

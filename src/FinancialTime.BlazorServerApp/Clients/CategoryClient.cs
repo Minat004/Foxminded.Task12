@@ -33,17 +33,27 @@ public class CategoryClient : ICategoryClient
         return JsonConvert.DeserializeObject<FinTypeAddDto>(await response.Content.ReadAsStringAsync());
     }
 
-    public async Task UpdateAsync(int id, FinTypeEditDto item)
+    public async Task<bool> UpdateAsync(int id, FinTypeEditDto item)
     {
         var response = await _httpClient.PutAsJsonAsync($"{_finTypeUrl}{id}", item);
 
-        if (!response.IsSuccessStatusCode) { }
+        if (!response.IsSuccessStatusCode)
+        {
+            return await Task.FromResult(false);
+        }
+
+        return await Task.FromResult(true);
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
         var response = await _httpClient.DeleteAsync($"{_finTypeUrl}{id}");
         
-        if (!response.IsSuccessStatusCode) { }
+        if (!response.IsSuccessStatusCode)
+        {
+            return await Task.FromResult(false);
+        }
+
+        return await Task.FromResult(true);
     }
 }

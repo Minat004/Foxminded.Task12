@@ -8,7 +8,7 @@ public interface IHistoryClient
     
     public Task<FinOperationAddDto?> AddAsync(FinOperationAddDto item);
     
-    public Task UpdateAsync(int id, FinOperationEditDto item);
+    public Task<bool> UpdateAsync(int id, FinOperationEditDto item);
     
-    public Task DeleteAsync(int id);
+    public Task<bool> DeleteAsync(int id);
 }
