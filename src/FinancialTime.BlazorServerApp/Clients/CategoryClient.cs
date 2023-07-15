@@ -19,41 +19,31 @@ public class CategoryClient : ICategoryClient
     {
         var response = await _httpClient.GetAsync(_finTypeUrl);
 
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new BadHttpRequestException($"Status code: {response.StatusCode}");
-        }
-        
+        if (!response.IsSuccessStatusCode) return default;
+
         return JsonConvert.DeserializeObject<IEnumerable<FinTypeDto>>(await response.Content.ReadAsStringAsync());
     }
 
-    public async Task AddAsync(FinTypeAddDto item)
+    public async Task<FinTypeAddDto?> AddAsync(FinTypeAddDto item)
     {
         var response = await _httpClient.PostAsJsonAsync(_finTypeUrl, item);
         
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new BadHttpRequestException($"Status code: {response.StatusCode}");
-        }
+        if (!response.IsSuccessStatusCode) return default;
+
+        return JsonConvert.DeserializeObject<FinTypeAddDto>(await response.Content.ReadAsStringAsync());
     }
 
     public async Task UpdateAsync(int id, FinTypeEditDto item)
     {
         var response = await _httpClient.PutAsJsonAsync($"{_finTypeUrl}{id}", item);
-        
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new BadHttpRequestException($"Status code: {response.StatusCode}");
-        }
+
+        if (!response.IsSuccessStatusCode) { }
     }
 
     public async Task DeleteAsync(int id)
     {
         var response = await _httpClient.DeleteAsync($"{_finTypeUrl}{id}");
         
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new BadHttpRequestException($"Status code: {response.StatusCode}");
-        }
+        if (!response.IsSuccessStatusCode) { }
     }
 }

@@ -19,18 +19,7 @@
     
 @if (_typeDtos is null)
 {
-    if (IsBadRequest)
-    {
-        <p>BAD REQUEST</p>
-    }
-    else
-    {
-        <div class="progress">
-            <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                 role="progressbar" 
-                 aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
-        </div>
-    }
+    <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
 }
 else
 {
@@ -72,20 +61,20 @@ else
     </table>
 }
 
-@if (IsOpenAddModal)
+@if (_isOpenAddModal)
 {
     <AddCategoryModal OnClose="CloseAddModal" 
                       OnSubmit="SubmitAddModal"/>
 }
 
-@if (IsOpenEditModal)
+@if (_isOpenEditModal)
 {
     <EditCategoryModal Category="_selected" 
                        OnClose="CloseEditModal" 
                        OnSubmit="SubmitEditModal"/>
 }
 
-@if (IsOpenDeleteDialogModal)
+@if (_isOpenDeleteDialogModal)
 {
     <DialogModal Title="Delete category" 
                  Body="Are you sure delete type from category?"
@@ -101,76 +90,59 @@ else
 
     private int _selectedId;
     
-    private bool IsOpenAddModal;
+    private bool _isOpenAddModal;
 
-    private bool IsOpenEditModal;
+    private bool _isOpenEditModal;
 
-    private bool IsOpenDeleteDialogModal;
-
-    private bool IsBadRequest;
+    private bool _isOpenDeleteDialogModal;
 
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
-            _typeDtos = new List<FinTypeDto>((await Client.GetAllAsync())!);
-        }
-        catch (Exception e)
-        {
-            IsBadRequest = true;
-        }
+        _typeDtos = new List<FinTypeDto>((await Client.GetAllAsync())!);
     }
 
     private async Task OpenAddModal()
     {
-        IsOpenAddModal = true;
+        _isOpenAddModal = true;
         StateHasChanged();
         await Task.CompletedTask;
     }
 
     private async Task CloseAddModal()
     {
-        IsOpenAddModal = false;
+        _isOpenAddModal = false;
         StateHasChanged();
         await Task.CompletedTask;
     }
     
     private async Task SubmitAddModal(FinTypeAddDto finTypeAddDto)
     {
-        IsOpenAddModal = false;
+        _isOpenAddModal = false;
         StateHasChanged();
 
         await Client.AddAsync(finTypeAddDto);
-
-        try
-        {
-            _typeDtos = new List<FinTypeDto>((await Client.GetAllAsync())!);
-        }
-        catch (Exception e)
-        {
-            IsBadRequest = true;
-        }
+        _typeDtos = new List<FinTypeDto>((await Client.GetAllAsync())!);
     }
     
     private async Task OpenEditModal(FinTypeDto? typeDto)
     {
         _selected = typeDto;
         
-        IsOpenEditModal = true;
+        _isOpenEditModal = true;
         StateHasChanged();
         await Task.CompletedTask;
     }
 
     private async Task CloseEditModal()
     {
-        IsOpenEditModal = false;
+        _isOpenEditModal = false;
         StateHasChanged();
         await Task.CompletedTask;
     }
     
     private async Task SubmitEditModal(FinTypeDto finTypeDto)
     {
-        IsOpenEditModal = false;
+        _isOpenEditModal = false;
         StateHasChanged();
 
         var finTypeEditDto = new FinTypeEditDto
@@ -179,45 +151,31 @@ else
             Budget = Enum.Parse<EBudget>(finTypeDto.Budget)
         };
 
-        try
-        {
-            await Client.UpdateAsync(finTypeDto.Id, finTypeEditDto);
-            _typeDtos = new List<FinTypeDto>((await Client.GetAllAsync())!);
-        }
-        catch (Exception e)
-        {
-            IsBadRequest = true;
-        }
+        await Client.UpdateAsync(finTypeDto.Id, finTypeEditDto);
+        _typeDtos = new List<FinTypeDto>((await Client.GetAllAsync())!);
     }
     
     private async Task OpenDeleteDialogModal(int id)
     {
         _selectedId = id;
-        IsOpenDeleteDialogModal = true;
+        _isOpenDeleteDialogModal = true;
         StateHasChanged();
         await Task.CompletedTask;
     }
 
     private async Task CloseDeleteDialogModal()
     {
-        IsOpenDeleteDialogModal = false;
+        _isOpenDeleteDialogModal = false;
         StateHasChanged();
         await Task.CompletedTask;
     }
     
     private async Task SubmitDeleteDialogModal(int id)
     {
-        IsOpenDeleteDialogModal = false;
+        _isOpenDeleteDialogModal = false;
         StateHasChanged();
         await Client.DeleteAsync(id);
         
-        try
-        {
-            _typeDtos = new List<FinTypeDto>((await Client.GetAllAsync())!);
-        }
-        catch (Exception e)
-        {
-            IsBadRequest = true;
-        }
+        _typeDtos = new List<FinTypeDto>((await Client.GetAllAsync())!);
     }
 }

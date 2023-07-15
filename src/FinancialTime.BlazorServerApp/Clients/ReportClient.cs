@@ -1,6 +1,4 @@
-﻿using System.Net;
-using FinancialTime.BlazorServerApp.Interfaces;
-using FinancialTime.BlazorServerApp.Settings;
+﻿using FinancialTime.BlazorServerApp.Interfaces;
 using FinancialTime.Core.DTOs.Report;
 using Newtonsoft.Json;
 
@@ -20,6 +18,8 @@ public class ReportClient : IReportClient
     public async Task<ReportDateDto?> GetDateReportAsync(DateTime date)
     {
         var response = await _httpClient.GetAsync($"{_reportUrl}{date:dd.MM.yyyy}");
+        
+        if (!response.IsSuccessStatusCode) return default;
 
         return JsonConvert.DeserializeObject<ReportDateDto>(await response.Content.ReadAsStringAsync());
     }
@@ -27,6 +27,8 @@ public class ReportClient : IReportClient
     public async Task<ReportPeriodDto?> GetPeriodReportAsync(DateTime startDate, DateTime endDate)
     {
         var response = await _httpClient.GetAsync($"{_reportUrl}{startDate:dd.MM.yyyy}/{endDate:dd.MM.yyyy}");
+        
+        if (!response.IsSuccessStatusCode) return default;
 
         return JsonConvert.DeserializeObject<ReportPeriodDto>(await response.Content.ReadAsStringAsync());
     }

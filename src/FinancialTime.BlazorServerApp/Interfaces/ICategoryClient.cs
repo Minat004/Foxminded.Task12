@@ -6,7 +6,7 @@ public interface ICategoryClient
 {
     public Task<IEnumerable<FinTypeDto>?> GetAllAsync();
 
-    public Task AddAsync(FinTypeAddDto item);
+    public Task<FinTypeAddDto?> AddAsync(FinTypeAddDto item);
 
     public Task UpdateAsync(int id, FinTypeEditDto item);
 

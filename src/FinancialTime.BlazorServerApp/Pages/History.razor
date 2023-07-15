@@ -20,11 +20,7 @@
 
 @if (_operationDtos is null)
 {
-    <div class="progress">
-        <div class="progress-bar progress-bar-striped progress-bar-animated" 
-             role="progressbar" 
-             aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
-    </div>
+    <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
 }
 else
 {
@@ -70,14 +66,14 @@ else
     </table>
 }
 
-@if (IsOpenAddModal)
+@if (_isOpenAddModal)
 {
     <AddOperationModal OnClose="CloseAddModal"
                        OnSubmit="SubmitAddModal"
                        Categories="_categories"/>
 }
 
-@if (IsOpenEditModal)
+@if (_isOpenEditModal)
 {
     <EditOperationModal OnClose="CloseEditModal"
                         OnSubmit="SubmitEditModal"
@@ -85,7 +81,7 @@ else
                         Operation="_selected"/>
 }
 
-@if (IsOpenDeleteDialogModal)
+@if (_isOpenDeleteDialogModal)
 {
     <DialogModal Title="Delete operation"
                  Body="Are you sure delete operation from history?"
@@ -103,11 +99,11 @@ else
 
     private int _selectedId;
     
-    private bool IsOpenAddModal;
+    private bool _isOpenAddModal;
 
-    private bool IsOpenEditModal;
+    private bool _isOpenEditModal;
 
-    private bool IsOpenDeleteDialogModal;
+    private bool _isOpenDeleteDialogModal;
 
     protected override async Task OnInitializedAsync()
     {
@@ -117,21 +113,21 @@ else
     
     private async Task OpenAddModal()
     {
-        IsOpenAddModal = true;
+        _isOpenAddModal = true;
         StateHasChanged();
         await Task.CompletedTask;
     }
 
     private async Task CloseAddModal()
     {
-        IsOpenAddModal = false;
+        _isOpenAddModal = false;
         StateHasChanged();
         await Task.CompletedTask;
     }
     
     private async Task SubmitAddModal(FinOperationAddDto finOperationAddDto)
     {
-        IsOpenAddModal = false;
+        _isOpenAddModal = false;
         StateHasChanged();
 
         await HistoryClient.AddAsync(finOperationAddDto);
@@ -143,21 +139,21 @@ else
     {
         _selected = operationDto;
         
-        IsOpenEditModal = true;
+        _isOpenEditModal = true;
         StateHasChanged();
         await Task.CompletedTask;
     }
 
     private async Task CloseEditModal()
     {
-        IsOpenEditModal = false;
+        _isOpenEditModal = false;
         StateHasChanged();
         await Task.CompletedTask;
     }
     
     private async Task SubmitEditModal(FinOperationDto operationDto)
     {
-        IsOpenEditModal = false;
+        _isOpenEditModal = false;
         StateHasChanged();
 
         var finOperationEditDto = new FinOperationEditDto
@@ -175,21 +171,21 @@ else
     private async Task OpenDeleteDialogModal(int id)
     {
         _selectedId = id;
-        IsOpenDeleteDialogModal = true;
+        _isOpenDeleteDialogModal = true;
         StateHasChanged();
         await Task.CompletedTask;
     }
 
     private async Task CloseDeleteDialogModal()
     {
-        IsOpenDeleteDialogModal = false;
+        _isOpenDeleteDialogModal = false;
         StateHasChanged();
         await Task.CompletedTask;
     }
     
     private async Task SubmitDeleteDialogModal(int id)
     {
-        IsOpenDeleteDialogModal = false;
+        _isOpenDeleteDialogModal = false;
         StateHasChanged();
         await HistoryClient.DeleteAsync(id);
         _operationDtos = new List<FinOperationDto>((await HistoryClient.GetAllAsync())!);

@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using FinancialTime.Core.Exceptions;
+using FinancialTime.Core.Models;
 using Newtonsoft.Json;
 
 namespace FinancialTime.WebAPI;
@@ -22,7 +23,6 @@ public class GlobalErrorHandlingMiddleware
         catch (Exception e)
         {
             await HandleExceptionAsync(context, e);
-            throw;
         }
     }
 
@@ -34,7 +34,8 @@ public class GlobalErrorHandlingMiddleware
 
         Message(exception, ref message, ref status, ref stackTrace);
         
-        var exceptionResult = JsonConvert.SerializeObject(new { error = message, stackTrace});
+        var exceptionResult = JsonConvert.SerializeObject(
+            new ErrorMessage { StatusCode = status, Error = message, StackTrace = stackTrace});
         
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)status;
@@ -58,6 +59,14 @@ public class GlobalErrorHandlingMiddleware
         {
             message = exception.Message;
             status = HttpStatusCode.BadRequest;
+            stackTrace = exception.StackTrace;
+            return;
+        }
+        
+        if (exceptionType == typeof(DuplicateTypeNameException))
+        {
+            message = exception.Message;
+            status = HttpStatusCode.Conflict;
             stackTrace = exception.StackTrace;
             return;
         }

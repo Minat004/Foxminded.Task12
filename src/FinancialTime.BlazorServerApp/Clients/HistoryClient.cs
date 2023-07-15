@@ -1,6 +1,4 @@
-﻿using System.Net;
-using FinancialTime.BlazorServerApp.Interfaces;
-using FinancialTime.BlazorServerApp.Settings;
+﻿using FinancialTime.BlazorServerApp.Interfaces;
 using FinancialTime.Core.DTOs.FinOperation;
 using Newtonsoft.Json;
 
@@ -20,22 +18,32 @@ public class HistoryClient : IHistoryClient
     public async Task<IEnumerable<FinOperationDto>?> GetAllAsync()
     {
         var response = await _httpClient.GetAsync(_finOperationUrl);
+        
+        if (!response.IsSuccessStatusCode) return default;
 
         return JsonConvert.DeserializeObject<IEnumerable<FinOperationDto>>(await response.Content.ReadAsStringAsync());
     }
 
-    public async Task AddAsync(FinOperationAddDto item)
+    public async Task<FinOperationAddDto?> AddAsync(FinOperationAddDto item)
     {
         var response = await _httpClient.PostAsJsonAsync(_finOperationUrl, item);
+        
+        if (!response.IsSuccessStatusCode) return default;
+        
+        return JsonConvert.DeserializeObject<FinOperationAddDto>(await response.Content.ReadAsStringAsync());
     }
 
     public async Task UpdateAsync(int id, FinOperationEditDto item)
     {
         var response = await _httpClient.PutAsJsonAsync($"{_finOperationUrl}{id}", item);
+        
+        if (!response.IsSuccessStatusCode) { }
     }
 
     public async Task DeleteAsync(int id)
     {
         var response = await _httpClient.DeleteAsync($"{_finOperationUrl}{id}");
+        
+        if (!response.IsSuccessStatusCode) { }
     }
 }

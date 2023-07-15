@@ -6,7 +6,7 @@ public interface IHistoryClient
 {
     public Task<IEnumerable<FinOperationDto>?> GetAllAsync();
     
-    public Task AddAsync(FinOperationAddDto item);
+    public Task<FinOperationAddDto?> AddAsync(FinOperationAddDto item);
     
     public Task UpdateAsync(int id, FinOperationEditDto item);
     
