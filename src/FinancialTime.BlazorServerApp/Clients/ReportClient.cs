@@ -26,7 +26,7 @@ public class ReportClient : IReportClient
 
     public async Task<ReportPeriodDto?> GetPeriodReportAsync(DateTime startDate, DateTime endDate)
     {
-        var response = await _httpClient.GetAsync($"{_reportUrl}?start-date={startDate:dd.MM.yyyy}&end-date={endDate:dd.MM.yyyy}");
+        var response = await _httpClient.GetAsync($"{_reportUrl}?startDate={startDate:dd.MM.yyyy}&endDate={endDate:dd.MM.yyyy}");
         
         if (!response.IsSuccessStatusCode) return default;
 
