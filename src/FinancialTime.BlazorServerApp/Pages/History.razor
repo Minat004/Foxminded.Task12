@@ -162,9 +162,9 @@ else
             Date = operationDto.Date,
             FinTypeId = operationDto.FinTypeId
         };
-
-        await HistoryClient.UpdateAsync(operationDto.Id, finOperationEditDto);
         
+        if (!await HistoryClient.UpdateAsync(operationDto.Id, finOperationEditDto)) return;
+
         _operationDtos = new List<FinOperationDto>((await HistoryClient.GetAllAsync())!);
     }
     
@@ -187,7 +187,9 @@ else
     {
         _isOpenDeleteDialogModal = false;
         StateHasChanged();
-        await HistoryClient.DeleteAsync(id);
+
+        if (!await HistoryClient.DeleteAsync(id)) return;
+        
         _operationDtos = new List<FinOperationDto>((await HistoryClient.GetAllAsync())!);
     }
 }

@@ -9,10 +9,10 @@ public class CategoryClient : ICategoryClient
     private readonly HttpClient _httpClient;
     private readonly string? _finTypeUrl;
 
-    public CategoryClient(HttpClient httpClient, IConfiguration configuration)
+    public CategoryClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        _finTypeUrl = configuration["FinanceConfiguration:FinType"];
+        _finTypeUrl = "api/FinType/";
     }
 
     public async Task<IEnumerable<FinTypeDto>?> GetAllAsync()

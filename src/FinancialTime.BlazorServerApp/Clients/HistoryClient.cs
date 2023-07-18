@@ -9,10 +9,10 @@ public class HistoryClient : IHistoryClient
     private readonly HttpClient _httpClient;
     private readonly string? _finOperationUrl;
 
-    public HistoryClient(HttpClient httpClient, IConfiguration configuration)
+    public HistoryClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        _finOperationUrl = configuration["FinanceConfiguration:FinOperation"];
+        _finOperationUrl = "api/FinOperation/";
     }
 
     public async Task<IEnumerable<FinOperationDto>?> GetAllAsync()

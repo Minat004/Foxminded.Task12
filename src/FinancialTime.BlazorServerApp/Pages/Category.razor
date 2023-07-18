@@ -151,7 +151,8 @@ else
             Budget = Enum.Parse<EBudget>(finTypeDto.Budget)
         };
 
-        await Client.UpdateAsync(finTypeDto.Id, finTypeEditDto);
+        if (!await Client.UpdateAsync(finTypeDto.Id, finTypeEditDto)) return;
+        
         _typeDtos = new List<FinTypeDto>((await Client.GetAllAsync())!);
     }
     
@@ -174,7 +175,8 @@ else
     {
         _isOpenDeleteDialogModal = false;
         StateHasChanged();
-        await Client.DeleteAsync(id);
+
+        if (!await Client.DeleteAsync(id)) return;
         
         _typeDtos = new List<FinTypeDto>((await Client.GetAllAsync())!);
     }
