@@ -7,17 +7,15 @@ namespace FinancialTime.BlazorServerApp.Clients;
 public class ReportClient : IReportClient
 {
     private readonly HttpClient _httpClient;
-    private readonly string? _reportUrl;
 
     public ReportClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        _reportUrl = "Report";
     }
 
     public async Task<ReportDateDto?> GetDateReportAsync(DateTime date)
     {
-        var response = await _httpClient.GetAsync($"{_reportUrl}?date={date:dd.MM.yyyy}");
+        var response = await _httpClient.GetAsync($"report?date={date:dd.MM.yyyy}");
         
         if (!response.IsSuccessStatusCode) return default;
 
@@ -26,7 +24,7 @@ public class ReportClient : IReportClient
 
     public async Task<ReportPeriodDto?> GetPeriodReportAsync(DateTime startDate, DateTime endDate)
     {
-        var response = await _httpClient.GetAsync($"{_reportUrl}?startDate={startDate:dd.MM.yyyy}&endDate={endDate:dd.MM.yyyy}");
+        var response = await _httpClient.GetAsync($"period-report?startDate={startDate:dd.MM.yyyy}&endDate={endDate:dd.MM.yyyy}");
         
         if (!response.IsSuccessStatusCode) return default;
 
