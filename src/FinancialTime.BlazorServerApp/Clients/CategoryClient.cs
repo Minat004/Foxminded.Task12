@@ -12,7 +12,7 @@ public class CategoryClient : ICategoryClient
     public CategoryClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        _finTypeUrl = "api/FinType/";
+        _finTypeUrl = "FinType";
     }
 
     public async Task<IEnumerable<FinTypeDto>?> GetAllAsync()

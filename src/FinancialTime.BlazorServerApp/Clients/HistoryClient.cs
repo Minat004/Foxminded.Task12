@@ -12,7 +12,7 @@ public class HistoryClient : IHistoryClient
     public HistoryClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        _finOperationUrl = "api/FinOperation/";
+        _finOperationUrl = "FinOperation";
     }
 
     public async Task<IEnumerable<FinOperationDto>?> GetAllAsync()

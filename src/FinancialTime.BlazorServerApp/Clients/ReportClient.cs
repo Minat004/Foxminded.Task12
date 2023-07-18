@@ -12,7 +12,7 @@ public class ReportClient : IReportClient
     public ReportClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        _reportUrl = "api/Report/";
+        _reportUrl = "Report";
     }
 
     public async Task<ReportDateDto?> GetDateReportAsync(DateTime date)
@@ -26,7 +26,7 @@ public class ReportClient : IReportClient
 
     public async Task<ReportPeriodDto?> GetPeriodReportAsync(DateTime startDate, DateTime endDate)
     {
-        var response = await _httpClient.GetAsync($"{_reportUrl}{startDate:dd.MM.yyyy}/{endDate:dd.MM.yyyy}");
+        var response = await _httpClient.GetAsync($"{_reportUrl}{startDate:dd.MM.yyyy}{endDate:dd.MM.yyyy}");
         
         if (!response.IsSuccessStatusCode) return default;
 
