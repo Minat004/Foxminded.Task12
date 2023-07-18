@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FinancialTime.WebAPI.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[action]")]
 public class ReportController : ControllerBase
 {
     private readonly IReportService _reportService;
@@ -18,8 +18,9 @@ public class ReportController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpGet("{date}")]
-    public async Task<ActionResult<ReportDateDto>> GetForDateAsync([FromRoute] string date)
+    [HttpGet]
+    [ActionName("report")]
+    public async Task<ActionResult<ReportDateDto>> GetForDateAsync([FromQuery] string date)
     {
         var dateTime = DateTime.Parse(date);
 
@@ -35,10 +36,11 @@ public class ReportController : ControllerBase
         return Ok(reportDto);
     }
 
-    [HttpGet("{startDate}/{endDate}")]
+    [HttpGet]
+    [ActionName("period-report")]
     public async Task<ActionResult<ReportPeriodDto>> GetForPeriodAsync(
-        [FromRoute] string startDate, 
-        [FromRoute] string endDate)
+        [FromQuery] string startDate, 
+        [FromQuery] string endDate)
     {
         var startDateTime = DateTime.Parse(startDate);
         var endDateTime = DateTime.Parse(endDate);

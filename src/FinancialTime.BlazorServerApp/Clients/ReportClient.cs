@@ -9,10 +9,10 @@ public class ReportClient : IReportClient
     private readonly HttpClient _httpClient;
     private readonly string? _reportUrl;
 
-    public ReportClient(HttpClient httpClient, IConfiguration configuration)
+    public ReportClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        _reportUrl = configuration["FinanceConfiguration:Report"];
+        _reportUrl = "api/Report/";
     }
 
     public async Task<ReportDateDto?> GetDateReportAsync(DateTime date)
