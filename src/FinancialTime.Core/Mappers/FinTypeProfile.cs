@@ -9,6 +9,8 @@ public class FinTypeProfile : Profile
     public FinTypeProfile()
     {
         CreateMap<FinType, FinTypeDto>()
+            .ForMember(dto => dto.Id, 
+                expression => expression.MapFrom(src => src.Id))
             .ForMember(dto => dto.Name, 
                 expression => expression.MapFrom(src => src.Name))
             .ForMember(dto => dto.Budget, 
@@ -24,10 +26,10 @@ public class FinTypeProfile : Profile
             .ReverseMap();
         
         CreateMap<FinType, FinTypeEditDto>()
-            .ForMember(dto => dto.Name, expression =>
-                expression.MapFrom(src => src.Name))
-            .ForMember(dto => dto.Budget, expression =>
-                expression.MapFrom(src => src.Budget))
+            .ForMember(dto => dto.Name, 
+                expression => expression.MapFrom(src => src.Name))
+            .ForMember(dto => dto.Budget, 
+                expression => expression.MapFrom(src => src.Budget))
             .ReverseMap();
     }
 }

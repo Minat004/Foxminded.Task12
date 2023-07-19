@@ -1,0 +1,183 @@
+﻿@page "/category"
+@using FinancialTime.BlazorServerApp.Interfaces
+@using FinancialTime.Core.DTOs.FinType
+@using FinancialTime.Core.Enums
+@inject ICategoryClient Client
+
+<PageTitle>Categories</PageTitle>
+
+<div class="container mb-3">
+    <div class="row">
+        <div class="col-md-auto">
+            <h3>Category</h3>
+        </div>
+        <div class="col-md-auto">
+            <button type="button" class="btn btn-primary" @onclick="OpenAddModal">Add</button>
+        </div>
+    </div>
+</div>
+    
+@if (_typeDtos is null)
+{
+    <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Number</th>
+            <th>Name</th>
+            <th>Income/Expense</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+            var num = 0;
+        }
+        @foreach (var typeDto in _typeDtos)
+        {
+            num++;
+            <tr>
+                <td>@num</td>
+                <td>@typeDto.Name</td>
+                <td>@typeDto.Budget</td>
+                <td>
+                    <button type="button"
+                            class="btn btn-primary"
+                            @onclick="async () => await OpenEditModal(typeDto)">
+                        Edit
+                    </button>
+                    <button type="button"
+                            class="btn btn-danger"
+                            @onclick="async () => await OpenDeleteDialogModal(typeDto.Id)">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@if (_isOpenAddModal)
+{
+    <AddCategoryModal OnClose="CloseAddModal" 
+                      OnSubmit="SubmitAddModal"/>
+}
+
+@if (_isOpenEditModal)
+{
+    <EditCategoryModal Category="_selected" 
+                       OnClose="CloseEditModal" 
+                       OnSubmit="SubmitEditModal"/>
+}
+
+@if (_isOpenDeleteDialogModal)
+{
+    <DialogModal Title="Delete category" 
+                 Body="Are you sure delete type from category?"
+                 Id="_selectedId"
+                 OnClose="CloseDeleteDialogModal"
+                 OnSubmit="SubmitDeleteDialogModal"/>
+}
+
+@code {
+    private List<FinTypeDto>? _typeDtos;
+
+    private FinTypeDto? _selected;
+
+    private int _selectedId;
+    
+    private bool _isOpenAddModal;
+
+    private bool _isOpenEditModal;
+
+    private bool _isOpenDeleteDialogModal;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _typeDtos = new List<FinTypeDto>((await Client.GetAllAsync())!);
+    }
+
+    private async Task OpenAddModal()
+    {
+        _isOpenAddModal = true;
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+
+    private async Task CloseAddModal()
+    {
+        _isOpenAddModal = false;
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+    
+    private async Task SubmitAddModal(FinTypeAddDto finTypeAddDto)
+    {
+        _isOpenAddModal = false;
+        StateHasChanged();
+
+        await Client.AddAsync(finTypeAddDto);
+        _typeDtos = new List<FinTypeDto>((await Client.GetAllAsync())!);
+    }
+    
+    private async Task OpenEditModal(FinTypeDto? typeDto)
+    {
+        _selected = typeDto;
+        
+        _isOpenEditModal = true;
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+
+    private async Task CloseEditModal()
+    {
+        _isOpenEditModal = false;
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+    
+    private async Task SubmitEditModal(FinTypeDto finTypeDto)
+    {
+        _isOpenEditModal = false;
+        StateHasChanged();
+
+        var finTypeEditDto = new FinTypeEditDto
+        {
+            Name = finTypeDto.Name,
+            Budget = Enum.Parse<EBudget>(finTypeDto.Budget)
+        };
+
+        if (!await Client.UpdateAsync(finTypeDto.Id, finTypeEditDto)) return;
+        
+        _typeDtos = new List<FinTypeDto>((await Client.GetAllAsync())!);
+    }
+    
+    private async Task OpenDeleteDialogModal(int id)
+    {
+        _selectedId = id;
+        _isOpenDeleteDialogModal = true;
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+
+    private async Task CloseDeleteDialogModal()
+    {
+        _isOpenDeleteDialogModal = false;
+        StateHasChanged();
+        await Task.CompletedTask;
+    }
+    
+    private async Task SubmitDeleteDialogModal(int id)
+    {
+        _isOpenDeleteDialogModal = false;
+        StateHasChanged();
+
+        if (!await Client.DeleteAsync(id)) return;
+        
+        _typeDtos = new List<FinTypeDto>((await Client.GetAllAsync())!);
+    }
+}

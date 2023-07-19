@@ -1,0 +1,49 @@
+﻿<div class="modal fade show"
+     aria-modal="true" 
+     role="dialog"
+     @onclick="Close">
+    <div class="modal-dialog" @onclick:stopPropagation="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@Title</h4>
+                <button type="button" class="btn btn-outline-danger" @onclick="Close">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                @Body
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="Submit">Ok</button>
+                <button type="button" class="btn btn-outline-primary" @onclick="Close">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnSubmit { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+    
+    [Parameter]
+    public string? Body { get; set; }
+    
+    [Parameter]
+    public int Id { get; set; }
+
+    private async Task Close()
+    {
+        await OnClose.InvokeAsync(true);
+    }
+
+    private async Task Submit()
+    {
+        await OnSubmit.InvokeAsync(Id);
+    }
+}

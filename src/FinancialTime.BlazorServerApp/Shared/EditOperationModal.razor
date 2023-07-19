@@ -1,0 +1,76 @@
+﻿@using FinancialTime.Core.DTOs.FinOperation
+@using FinancialTime.Core.DTOs.FinType
+@using System.Globalization
+
+<div class="modal fade show"
+     aria-modal="true" 
+     role="dialog"
+     @onclick="Close">
+    <div class="modal-dialog" @onclick:stopPropagation="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit operation</h4>
+                <button type="button" class="btn btn-outline-danger" @onclick="Close">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="Operation" OnValidSubmit="Submit">
+                    <DataAnnotationsValidator/>
+                    <ValidationSummary/>
+                    <div class="form-group">
+                        <label class="col-form-label">Date:</label>
+                        <RadzenDatePicker class="w-100" @bind-Value="Operation!.Date">
+                            <FooterTemplate>
+                                <RadzenButton Click="@(() => Operation!.Date = DateTime.Now)" Text="Today" class="my-3 w-100"/>
+                            </FooterTemplate>
+                        </RadzenDatePicker>
+                    </div>
+                    <div class="form-group">
+                        <label for="value" class="col-form-label">Value:</label>
+                        <InputNumber @bind-Value="Operation!.Value" class="form-control" id="value"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="category" class="col-form-label">Category:</label>
+                        <select class="form-select" id="category" @bind="Operation!.FinTypeId">
+                            @foreach (var category in Categories!)
+                            {
+                                <option value="@category.Id">@category.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Edit</button>
+                        <button type="button" class="btn btn-outline-primary" @onclick="Close">Cancel</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+    [Parameter]
+    public EventCallback<FinOperationDto> OnSubmit { get; set; }
+
+    [Parameter]
+    public IEnumerable<FinTypeDto>? Categories { get; set; }
+
+    [Parameter]
+    public FinOperationDto? Operation { get; set; }
+
+    private async Task Close()
+    {
+        await OnClose.InvokeAsync(true);
+    }
+
+    private async Task Submit()
+    {
+        var finOperationDto = Operation;
+
+        await OnSubmit.InvokeAsync(finOperationDto);
+    }
+}
